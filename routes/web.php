@@ -7,9 +7,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/tickets', [PageController::class, 'tickets']);
-Route::get('/tickets2', [PageController::class, 'tickets2']);
-Route::get('/about', [PageController::class, 'about']);
+Route::get('/tickets', [PageController::class, 'tickets']);     // Original page not using layout
+Route::get('/tickets2', [PageController::class, 'tickets2']);   // Page adapted on layout
+Route::get('/about', [PageController::class, 'about']);         // Static page using layout
 
 # DEBUG ZONE
 use Illuminate\Support\Facades\DB;

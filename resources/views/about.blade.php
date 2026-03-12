@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('common/layout')
 
 <head><title>About - Cross Tickets</title></head>
 
