@@ -10,7 +10,6 @@ function applyFilters() {
 
     items.forEach(item => {
         const tags = item.dataset.tags.split(' ');
-
         const matches =
             activeFilters.length === 0 ||
             activeFilters.every(filter => tags.includes(filter));

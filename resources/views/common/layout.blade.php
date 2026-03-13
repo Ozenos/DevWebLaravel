@@ -21,7 +21,6 @@
             },
         };
     </script>
-    <title>Cross Tickets</title>
 </head>
 
 <body class="min-h-screen bg-secondary">

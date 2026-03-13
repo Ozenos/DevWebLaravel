@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collaborator;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    public function tickets()
+    public function list()
     {
-        return view('listTicket');
+        //dd(Ticket::all()[0]->user);
+        return view('listTicket', [
+            'tickets' => Ticket::with('user')->get()
+        ]);
     }
-    public function tickets2()
+    public function ticketsOLD()
     {
-        return view('listTicket2');
+        return view('listTicketOLD');
     }
 
     public function about()

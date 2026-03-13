@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tickets_collaborators', function (Blueprint $table) {
-            $table->id('ID');
-            $table->unsignedBigInteger('ticketID');
-            $table->unsignedBigInteger('userID');
+        Schema::create('ticket_user', function (Blueprint $table) {
+            $table->id('id');
+            $table->foreignId('ticket_id')->constrained('tickets')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tickets_collaborators');
+        Schema::dropIfExists('ticket_user');
     }
 };

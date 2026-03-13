@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->id('ID');
+            $table->id('id');
             $table->string('title');
             $table->integer('time');
-            $table->enum('advancement', ['Ouvert','En cours','Terminé'])->default('Ouvert');
-            $table->enum('facturation', ['Inclus', 'Facturable'])->default(value: 'Inclus');
-            $table->unsignedBigInteger('owner');
+            $table->enum('advancement', ['open','progress','completed'])->default('open');
+            $table->enum('facturation', ['included', 'facturable'])->default('included');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
