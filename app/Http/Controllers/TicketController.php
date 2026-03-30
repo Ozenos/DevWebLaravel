@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use App\Models\User;
+use Illuminate\Routing\Redirector;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -42,9 +43,13 @@ class TicketController extends Controller
     /**
      * Display a ticket's edit view.
      */
-    public function edit($id): View
+    public function edit($id): View|Redirector|RedirectResponse
     {
         $ticket = Ticket::findOrFail($id);
+
+        if (auth()->id() != $ticket->user->id) {
+            return redirect()->route('tickets.list');
+        }
 
         return view('tickets.create', [
             'ticket' => $ticket
@@ -85,6 +90,8 @@ class TicketController extends Controller
             'user_id' => $validated['user_id']
         ]);
 
+        $ticket->load('user', 'collaborators');
+
         return response()->json([
             'message' => 'Ticket ajoute avec succes.',
             'ticket' => [
@@ -93,6 +100,9 @@ class TicketController extends Controller
                 'advancement' => $ticket->advancement,
                 'facturation' => $ticket->facturation,
                 'user_id' => $ticket->user_id,
+                'user_name' => $ticket->user->name,
+                'collaborators' => $ticket->collaborators->pluck('name'),
+                'can_edit' => $ticket->user_id === auth()->id()
             ],
         ], 201);
     }

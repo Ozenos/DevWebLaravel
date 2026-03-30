@@ -2,23 +2,14 @@
   Création d’un ticket
 </h1>
 
-@php
-    $ticketId = null;
-    $segments = request()->segments(); // tableau des segments de l'URL
-
-    // Vérifie qu'il y a au moins 2 segments et que le dernier est "edit"
-    if (count($segments) >= 2 && end($segments) === 'edit') {
-        $ticketId = $segments[count($segments) - 2]; // segment avant "edit"
-        if (!is_numeric($ticketId)) {
-            $ticketId = null; // sécurité
-        }
-    }
-@endphp
-
 <form class="space-y-1" id="newTicketForm" action="{{ route('api.tickets.store') }}" method="POST">
   @csrf
   <input type="hidden" name="user_id" id="user_id" value="{{ auth()->id() }}">
-  <input type="hidden" id="id" name="id" value="{{ $ticket->id ?? $ticketId }}">
+  <input type="hidden" id="id" name="id"
+    @if ($ticket)
+      value="{{ $ticket->id }}"
+    @endif
+    >
   <input type="hidden" id="update_url" value="{{ route('api.tickets.update', ['ticket' => '__ID__']) }}">
 
   <!-- Titre -->
@@ -83,7 +74,7 @@
       Temps estimé (en heures)
     </label>
     <input type="number" id="time" min="1" step="1" placeholder="1" name="time" value="{{ $ticket->time ?? '' }}"
-      class="w-full rounded-lg bg-secondary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      class="w-1/4 rounded-lg bg-secondary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
     <p id="time_error"
       class="invisible inline-block text-sm font-medium text-red-600 rounded-md border border-red-300 bg-red-200 mt-1 ml-2 py-1 px-2">
       Veuillez inclure une estimation de temps en heures entières</p>

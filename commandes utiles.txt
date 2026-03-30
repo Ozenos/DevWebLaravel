@@ -2,4 +2,3 @@ php artisan migrate:fresh
 php artisan migrate:fresh --seed
 php artisan db:seed --class=TicketsTableSeeder
 composer run dev
-A faire : il est possible d'accéder à des tickets qui ne nous appartiennent pas avec tickets/id/edit

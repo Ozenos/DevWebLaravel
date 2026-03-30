@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('id');
             $table->string('title');
             $table->integer('time');
+            $table->integer('time_elapsed')->default(0);
+            $table->string('description')->nullable();
             $table->enum('advancement', ['open','progress','completed'])->default('open');
             $table->enum('facturation', ['included', 'facturable'])->default('included');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();

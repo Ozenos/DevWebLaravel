@@ -12,7 +12,7 @@ class Ticket extends Model
     //
     protected $table = "tickets";
     protected $fillable = [
-        'title', 'time', 'advancement', 'facturation', 'user_id'
+        'title', 'time', 'advancement', 'facturation', 'user_id', 'description'
     ];
     public function user(): BelongsTo
     {
@@ -28,7 +28,7 @@ class Ticket extends Model
             case "open": return "Ouvert";
             case "progress": return "En cours";
             case "completed": return "Terminé";
-            default: return "error";
+            default: return $this->advancement;
         } 
     }
     public function displayFacturation(): string
@@ -36,21 +36,21 @@ class Ticket extends Model
         switch ($this->facturation) {
             case "included": return "Inclus";
             case "facturable": return "Facturable";
-            default: return "error";
+            default: return $this->facturation;
         }
     }
-    public function convertAdvancement(): string
+    public function convertAdvancement(String $adv): string
     {
-        switch ($this->advancement) {
+        switch ($adv) {
             case "Ouvert": return "open";
             case "En cours": return "progress";
             case "Terminé": return "completed";
             default: return "error";
         } 
     }
-    public function convertFacturation(): string
+    public function convertFacturation(String $fac): string
     {
-        switch ($this->facturation) {
+        switch ($fac) {
             case "Inclus": return "included";
             case "Facturable": return "facturable";
             default: return "error";

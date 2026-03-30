@@ -8,7 +8,7 @@ function check_title() {
     // Verify title selection
     const title = titleInput
     // .value get input value
-    console.log("title : ", title.value);
+    //console.log("title : ", title.value);
 
     const title_error = document.querySelector('#title_error');
 
@@ -25,7 +25,7 @@ function check_time() {
     // Verify time selection
     const time = timeInput
     // .value get input value
-    console.log("time H : ", time.value);
+    //console.log("time H : ", time.value);
     const Hval = Number.isInteger(Number(time.value)) && Number(time.value) > 0;
 
     const time_error = document.querySelector('#time_error');
@@ -52,7 +52,7 @@ const form = document.getElementById('newTicketForm');
 form.addEventListener('submit', function (e) {
     e.preventDefault();
     let nb_errors = check_title() + check_time();
-    console.log("nb_errors : ", nb_errors);
+    //console.log("nb_errors : ", nb_errors);
 
     if (nb_errors == 0) {
 
@@ -80,7 +80,7 @@ form.addEventListener('submit', function (e) {
             facturation: fact
         };
 
-        console.log(formData)
+        //console.log(formData)
 
         const updateRoute = document.getElementById('update_url').value;
         // Si ticketId est présent → édition, sinon création
@@ -98,7 +98,31 @@ form.addEventListener('submit', function (e) {
             body: JSON.stringify(formData)
         })
             .then(res => res.json())
-            .then(ticket => console.log('Ticket créé :', ticket))
+            //.then(ticket => console.log('Ticket créé :', ticket))
+            .then(data => {
+                const ticket_list = document.getElementById('ticket_list');
+                if (ticket_list == null) return;
+
+                //console.log('Ticket créé :', data);
+                const ticket = data.ticket; 
+                
+                const existing = ticket_list.querySelector(`[data-id="${ticket.id}"]`);
+                //console.log(existing);
+                if (existing) {
+                    console.log('UPDATING A TICKET');
+                    // UPDATE
+                    existing.dataset.tags = `${ticket.advancement} ${ticket.facturation}`;
+                    existing.querySelector('[data-field="title"]').textContent = ticket.title;
+                    existing.querySelector('[data-field="time"]').textContent = `${ticket.time} heure${ticket.time > 1 ? 's' : ''}`;
+                    existing.querySelector('[data-field="advancement"]').textContent = convertAdvancement(ticket.advancement);
+                    existing.querySelector('[data-field="facturation"]').textContent = convertFacturation(ticket.facturation);
+                } else {
+                    console.log('ADDING A TICKET');
+                    // CREATE
+                    addTicketToList(ticket);
+                }
+                dialog.close();
+            })
             .catch(err => console.error(err));
 
         titleInput.value = "";
@@ -106,7 +130,7 @@ form.addEventListener('submit', function (e) {
         descInput.value = "";
 
         const toast = document.getElementById("success");
-        console.log(toast);
+        //console.log(toast);
         toast.classList.remove('invisible');
         // Wait 3 seconds then remove
         setTimeout(() => {
@@ -114,3 +138,19 @@ form.addEventListener('submit', function (e) {
         }, 5000);
     }
 });
+
+function convertAdvancement(adv) {
+    switch (adv) {
+        case 'open': return 'Ouvert';
+        case 'progress': return 'En cours';
+        case 'completed': return 'Terminé';
+        default: return adv;
+    }
+}
+function convertFacturation(fac) {
+    switch (fac) {
+        case "included": return "Inclus";
+        case "facturable": return "Facturable";
+        default: return fac;
+    }
+}
