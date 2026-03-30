@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+use App\Models\User;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Controllers\Controller;
+
+class SessionController extends Controller
+{
+    
+    public function create(Request $request): View|RedirectResponse
+    {
+        if (
+            config('demo.enabled')
+            && config('demo.auto_login')
+            && $request->getHost() === config('demo.host')
+        ) {
+            $user = User::where('email', config('demo.user_email'))->firstOrFail();
+
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
+
+        return view('auth.login');
+    }
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard', absolute: false));
+    }
+}

@@ -84,7 +84,7 @@ class TicketsTableSeeder extends Seeder
                 'time' => 1,
                 'advancement' => 'progress',
                 'facturation' => 'facturable',
-                'user_id' => 1
+                'user_id' => 3
             ],
             [
                 'title' => "DESTRUCTION",
@@ -109,6 +109,10 @@ class TicketsTableSeeder extends Seeder
             [
                 'ticket_id' => 5,
                 'user_id' => 2,
+            ],
+            [
+                'ticket_id' => 5,
+                'user_id' => 1,
             ],
         ];
         foreach ($collaborators as $collaborator) {

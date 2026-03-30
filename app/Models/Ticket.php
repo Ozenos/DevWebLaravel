@@ -39,4 +39,21 @@ class Ticket extends Model
             default: return "error";
         }
     }
+    public function convertAdvancement(): string
+    {
+        switch ($this->advancement) {
+            case "Ouvert": return "open";
+            case "En cours": return "progress";
+            case "Terminé": return "completed";
+            default: return "error";
+        } 
+    }
+    public function convertFacturation(): string
+    {
+        switch ($this->facturation) {
+            case "Inclus": return "included";
+            case "Facturable": return "facturable";
+            default: return "error";
+        }
+    }
 }
